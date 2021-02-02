@@ -1,0 +1,9 @@
+{
+  "domain": "gddr",
+  "name": "GoodDriver",
+  "documentation": "https://github.com/dscao/gooddriver",
+  "dependencies": [
+    "zone"
+  ],
+  "codeowners": ["@dscao"]
+}

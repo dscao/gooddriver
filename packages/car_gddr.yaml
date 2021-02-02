@@ -1,0 +1,6 @@
+    
+device_tracker:  
+  - platform: gddr
+    name: 'mycar'
+    id: '123456'
+    key: '6928FAA6-B970-F5A5-85F0-XXXXXXXXXXXX'
