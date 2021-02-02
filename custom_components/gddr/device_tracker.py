@@ -142,6 +142,7 @@ class GddrDeviceScanner(DeviceScanner):
                 "host_name": self._name,
                 "attributes": {
                     "icon": "mdi:car",
+                    "querytime": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
                     "time": ret['MESSAGE']['HD_RECENT_LOCATION']['Time'],
                     "speed": ret['MESSAGE']['HD_RECENT_LOCATION']['Speed'],
                     "course": ret['MESSAGE']['HD_RECENT_LOCATION']['Course'],
