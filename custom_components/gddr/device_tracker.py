@@ -4,7 +4,7 @@ Support for gooddriver.cn 优驾联网版
     dscao
 # Created:
     2021/1/28
-   
+device_tracker:    
   - platform: gddr
     name: 'gooddriver'
     id: '123456'
@@ -99,7 +99,7 @@ class GddrDeviceScanner(DeviceScanner):
             
     
     async def async_update_info(self, now=None):
-        """Get the bridge info."""
+        """Get the gps info."""
         HEADERS = {
             'Host': 'restcore.gooddriver.cn',
             'SDF': self._key,
@@ -123,17 +123,7 @@ class GddrDeviceScanner(DeviceScanner):
         res = re.sub(r'"{','{',res)
         res = re.sub(r'}"','}',res)
         _Log.debug(res)
-        # if res.find("html") >= 0 :
-            # _Log.error("参数存在问题,请重新抓包填写SDF和openid")
-            # return
-            # """_Log.error(res)"""
-        # else:
-        	# _Log.info("请求成功.....")  
-
-        ret = json.loads(res, strict=False)        
-        
-        
-        
+        ret = json.loads(res, strict=False)
         
         if ret['ERROR_CODE'] == 0:
             _Log.info("请求服务器信息成功.....") 
@@ -142,6 +132,8 @@ class GddrDeviceScanner(DeviceScanner):
                 "host_name": self._name,
                 "attributes": {
                     "icon": "mdi:car",
+                    "status": ret['MESSAGE']['HD_STATE'],
+                    "statustime": ret['MESSAGE']['HD_STATE_TIME'],
                     "querytime": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
                     "time": ret['MESSAGE']['HD_RECENT_LOCATION']['Time'],
                     "speed": ret['MESSAGE']['HD_RECENT_LOCATION']['Speed'],

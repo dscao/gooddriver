@@ -4,8 +4,7 @@ Support for gooddriver.cn 优驾联网版
     dscao
 # Created:
     2021/1/28
-配置格式：
-device_tracker  
+device_tracker:    
   - platform: gddr
     name: 'gooddriver'
     id: '123456'
