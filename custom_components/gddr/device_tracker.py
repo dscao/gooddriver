@@ -21,7 +21,7 @@ import homeassistant.helpers.config_validation as cv
 import voluptuous as vol
 from homeassistant.components.sensor import PLATFORM_SCHEMA
 from bs4 import BeautifulSoup
-
+from requests import ReadTimeout, ConnectTimeout, HTTPError, Timeout, ConnectionError
 from datetime import timedelta
 import homeassistant.util.dt as dt_util
 from homeassistant.components import zone
