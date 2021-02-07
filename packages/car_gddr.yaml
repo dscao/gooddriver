@@ -4,3 +4,27 @@ device_tracker:
     name: 'mycar'
     id: '123456'
     key: '6928FAA6-B970-F5A5-85F0-XXXXXXXXXXXX'
+    
+sensor:
+  - platform: template
+    sensors:
+      since_last_carstop:
+        friendly_name: 停车时长
+        value_template: >-
+          {% set stop_time = as_timestamp(now()) - as_timestamp(state_attr('device_tracker.gddr_gooddriver', 'statustime')) %}
+          {% set days = (stop_time // (60 * 60 * 24)) %}
+          {% set weeks = (days// 7) %}
+          {% set hours = (stop_time// (60 * 60)) - days * 24 %}
+          {% set minutes = (stop_time // 60) - (days * 24 * 60) %}
+          {% set days = ((stop_time // (60 * 60 * 24))) - (weeks * 7) %}
+          {% set minutes = (minutes) - (hours * 60) %}
+          {% macro phrase(value, name) %}
+            {%- set value = value | int %}
+            {{-'{}{}{}'.format(value,name,end) if value | int > 0 else''}}
+          {%- endmacro %}
+          {% set text = [ phrase(weeks,'周'),phrase(days,'天'), phrase(hours,'小时'), phrase(minutes,'分钟') ] | select('!=','') | list | join('') %}
+          {% if state_attr('device_tracker.gddr_gooddriver', 'status') == "车辆熄火" %}
+            {{ text }}
+          {% else %}
+            运行中
+          {% endif %}
