@@ -49,7 +49,7 @@ __version__ = '0.1.0'
 _Log=logging.getLogger(__name__)
 
 COMPONENT_REPO = 'https://github.com/dscao/gooddriver/'
-DEFAULT_SCAN_INTERVAL = timedelta(seconds=60)
+DEFAULT_SCAN_INTERVAL = timedelta(seconds=30)
 ICON = 'mdi:car'
 
 DEFAULT_NAME = 'gooddriver'
@@ -127,12 +127,18 @@ class GddrDeviceScanner(DeviceScanner):
         
         if ret['ERROR_CODE'] == 0:
             _Log.info("请求服务器信息成功.....") 
+            if ret['MESSAGE']['HD_STATE'] == 1:
+                status = "车辆点火"
+            elif ret['MESSAGE']['HD_STATE'] == 2:
+                status = "车辆熄火"
+            else:
+                status = "未知"                          
             kwargs = {
                 "dev_id": slugify("gddr_{}".format(self._name)),
-                "host_name": self._name,
+                "host_name": self._name,                
                 "attributes": {
-                    "icon": "mdi:car",
-                    "status": ret['MESSAGE']['HD_STATE'],
+                    "icon": ICON,
+                    "status": status,
                     "statustime": ret['MESSAGE']['HD_STATE_TIME'],
                     "querytime": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
                     "time": ret['MESSAGE']['HD_RECENT_LOCATION']['Time'],
@@ -144,7 +150,7 @@ class GddrDeviceScanner(DeviceScanner):
                     ret['MESSAGE']['HD_RECENT_LOCATION']['Lat'] + 0.00240,
                     ret['MESSAGE']['HD_RECENT_LOCATION']['Lng'] - 0.00540,
                 ]
-                       
+       
         else:
             _Log.error("send request error....")
             
