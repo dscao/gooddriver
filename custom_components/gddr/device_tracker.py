@@ -45,7 +45,7 @@ from homeassistant.util.location import distance
 
 TYPE_GEOFENCE = "Geofence"
 
-__version__ = '0.1.0'
+__version__ = '0.1.1'
 _Log=logging.getLogger(__name__)
 
 COMPONENT_REPO = 'https://github.com/dscao/gooddriver/'
@@ -55,6 +55,11 @@ ICON = 'mdi:car'
 DEFAULT_NAME = 'gooddriver'
 ID = 'id'
 KEY = 'key'
+
+laststoptime = "未知"
+lastlat = "未知"
+lastlon = "未知"
+runorstop = "未知"
 
 PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
 	vol.Required(ID): cv.string,
@@ -100,6 +105,10 @@ class GddrDeviceScanner(DeviceScanner):
     
     async def async_update_info(self, now=None):
         """Get the gps info."""
+        global laststoptime
+        global lastlat
+        global lastlon
+        global runorstop
         HEADERS = {
             'Host': 'restcore.gooddriver.cn',
             'SDF': self._key,
@@ -127,29 +136,45 @@ class GddrDeviceScanner(DeviceScanner):
         
         if ret['ERROR_CODE'] == 0:
             _Log.info("请求服务器信息成功.....") 
+            
             if ret['MESSAGE']['HD_STATE'] == 1:
                 status = "车辆点火"
             elif ret['MESSAGE']['HD_STATE'] == 2:
                 status = "车辆熄火"
             else:
-                status = "未知"                          
+                status = "未知"
+                
+            if ret['MESSAGE']['HD_RECENT_LOCATION']['Lat'] == lastlat and ret['MESSAGE']['HD_RECENT_LOCATION']['Lng'] == lastlon and runorstop == "运动":
+                laststoptime = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                runorstop = "静止"
+            elif ret['MESSAGE']['HD_RECENT_LOCATION']['Lat'] != lastlat or ret['MESSAGE']['HD_RECENT_LOCATION']['Lng'] != lastlon:
+                lastlat = ret['MESSAGE']['HD_RECENT_LOCATION']['Lat']
+                lastlon = ret['MESSAGE']['HD_RECENT_LOCATION']['Lng']
+                runorstop = "运动"
+                
             kwargs = {
                 "dev_id": slugify("gddr_{}".format(self._name)),
                 "host_name": self._name,                
                 "attributes": {
                     "icon": ICON,
                     "status": status,
-                    "statustime": ret['MESSAGE']['HD_STATE_TIME'],
                     "querytime": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                    "laststoptime": laststoptime,
+                    "statustime": ret['MESSAGE']['HD_STATE_TIME'], 
                     "time": ret['MESSAGE']['HD_RECENT_LOCATION']['Time'],
                     "speed": ret['MESSAGE']['HD_RECENT_LOCATION']['Speed'],
                     "course": ret['MESSAGE']['HD_RECENT_LOCATION']['Course'],
+                    "runorstop": runorstop,
                     },
                 }
             kwargs["gps"] = [
                     ret['MESSAGE']['HD_RECENT_LOCATION']['Lat'] + 0.00240,
                     ret['MESSAGE']['HD_RECENT_LOCATION']['Lng'] - 0.00540,
                 ]
+            if status == "车辆点火":
+                interval = 10
+            else:
+                interval = 60
        
         else:
             _Log.error("send request error....")
