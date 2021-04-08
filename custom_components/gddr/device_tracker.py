@@ -21,6 +21,8 @@ import homeassistant.helpers.config_validation as cv
 import voluptuous as vol
 from homeassistant.components.sensor import PLATFORM_SCHEMA
 from bs4 import BeautifulSoup
+from aiohttp.client_exceptions import ClientConnectorError
+from async_timeout import timeout
 from requests import ReadTimeout, ConnectTimeout, HTTPError, Timeout, ConnectionError
 from datetime import timedelta
 import homeassistant.util.dt as dt_util
@@ -94,7 +96,14 @@ class GddrDeviceScanner(DeviceScanner):
         self._state = None
         self.attributes = {}
     
-        
+    def get_data(self, url, headerstr):
+        json_text = requests.get(url, headers=headerstr).content
+        json_text = json_text.decode('utf-8')
+        json_text = re.sub(r'\\','',json_text)
+        json_text = re.sub(r'"{','{',json_text)
+        json_text = re.sub(r'}"','}',json_text)
+        resdata = json.loads(json_text)
+        return resdata    
     
     async def async_start(self, hass, interval):
         """Perform a first update and start polling at the given interval."""
@@ -113,26 +122,36 @@ class GddrDeviceScanner(DeviceScanner):
             'Host': 'restcore.gooddriver.cn',
             'SDF': self._key,
             'Accept': '\*/\*',
-            'User-Agent': 'gooddriver/.7.1 CFNetwork/1209 Darwin/20.2.0',
+            'User-Agent': 'gooddriver/7.8.0 CFNetwork/1220.1 Darwin/20.3.0',
             'Accept-Language': 'zh-cn',
             'Accept-Encoding': 'gzip, deflate',
             'Connection': 'keep-alive'
             }
+        # try:
+            # response = requests.get(self._url, headers = HEADERS)
+        # except ReadTimeout:
+            # _Log.error("Connection timeout....")
+        # except ConnectionError:
+            # _Log.error("Connection Error....")
+        # except RequestException:
+            # _Log.error("Unknown Error")
+        # '''_Log.info( response ) '''
+        # res = response.content.decode('utf-8')
+        # res = re.sub(r'\\','',res)
+        # res = re.sub(r'"{','{',res)
+        # res = re.sub(r'}"','}',res)
+        # _Log.debug(res)
+        # ret = json.loads(res, strict=False)
+        
         try:
-            response = requests.get(self._url, headers = HEADERS)
-        except ReadTimeout:
-            _Log.error("Connection timeout....")
-        except ConnectionError:
-            _Log.error("Connection Error....")
-        except RequestException:
-            _Log.error("Unknown Error")
-        '''_Log.info( response ) '''
-        res = response.content.decode('utf-8')
-        res = re.sub(r'\\','',res)
-        res = re.sub(r'"{','{',res)
-        res = re.sub(r'}"','}',res)
-        _Log.debug(res)
-        ret = json.loads(res, strict=False)
+            async with timeout(10):                
+                ret =  await self.hass.async_add_executor_job(self.get_data, self._url, HEADERS)
+                _Log.debug("请求结果: %s", ret)
+        except (
+            ClientConnectorError
+        ) as error:
+            raise UpdateFailed(error)
+        _Log.debug("Requests remaining: %s", self._url)
         
         if ret['ERROR_CODE'] == 0:
             _Log.info("请求服务器信息成功.....") 
