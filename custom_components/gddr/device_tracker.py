@@ -127,21 +127,6 @@ class GddrDeviceScanner(DeviceScanner):
             'Accept-Encoding': 'gzip, deflate',
             'Connection': 'keep-alive'
             }
-        # try:
-            # response = requests.get(self._url, headers = HEADERS)
-        # except ReadTimeout:
-            # _Log.error("Connection timeout....")
-        # except ConnectionError:
-            # _Log.error("Connection Error....")
-        # except RequestException:
-            # _Log.error("Unknown Error")
-        # '''_Log.info( response ) '''
-        # res = response.content.decode('utf-8')
-        # res = re.sub(r'\\','',res)
-        # res = re.sub(r'"{','{',res)
-        # res = re.sub(r'}"','}',res)
-        # _Log.debug(res)
-        # ret = json.loads(res, strict=False)
         
         try:
             async with timeout(10):                
@@ -171,6 +156,21 @@ class GddrDeviceScanner(DeviceScanner):
                 lastlon = ret['MESSAGE']['HD_RECENT_LOCATION']['Lng']
                 runorstop = "运动"
                 
+            def time_diff (timestamp):
+                result = datetime.datetime.now() - datetime.datetime.fromtimestamp(timestamp)
+                hours = int(result.seconds / 3600)
+                minutes = int(result.seconds % 3600 / 60)
+                seconds = result.seconds%3600%60
+                if result.days > 0:
+                    return("{0}天{1}小时{2}分钟".format(result.days,hours,minutes))
+                elif hours > 0:
+                    return("{0}小时{1}分钟".format(hours,minutes))
+                elif minutes > 0:
+                    return("{0}分钟{1}秒".format(minutes,seconds))
+                else:
+                    return("{0}秒".format(seconds))
+            
+                
             kwargs = {
                 "dev_id": slugify("gddr_{}".format(self._name)),
                 "host_name": self._name,                
@@ -184,6 +184,7 @@ class GddrDeviceScanner(DeviceScanner):
                     "speed": ret['MESSAGE']['HD_RECENT_LOCATION']['Speed'],
                     "course": ret['MESSAGE']['HD_RECENT_LOCATION']['Course'],
                     "runorstop": runorstop,
+                    "Parking_time": time_diff (int(time.mktime(time.strptime(ret['MESSAGE']['HD_RECENT_LOCATION']['Time'], "%Y-%m-%d %H:%M:%S")))),
                     },
                 }
             kwargs["gps"] = [
