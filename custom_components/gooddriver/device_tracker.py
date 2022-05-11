@@ -4,7 +4,7 @@ import time, datetime
 from datetime import datetime, timedelta
 
 from homeassistant.components.device_tracker.config_entry import TrackerEntity
-
+from homeassistant.helpers.device_registry import DeviceEntryType
 #from homeassistant.helpers.entity import Entity
 
 from homeassistant.const import (
