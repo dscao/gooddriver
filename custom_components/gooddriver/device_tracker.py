@@ -78,7 +78,7 @@ class gooddriverEntity(TrackerEntity):
             "identifiers": {(DOMAIN, self.coordinator.data["location_key"])},
             "name": self._name,
             "manufacturer": MANUFACTURER,
-            "entry_type": "service",
+            "entry_type": DeviceEntryType.SERVICE,
         }
     @property
     def should_poll(self):
