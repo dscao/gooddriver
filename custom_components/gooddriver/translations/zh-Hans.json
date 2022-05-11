@@ -1,0 +1,35 @@
+{
+    "config": {
+        "title": "优驾盒子联网版",
+        "step": {
+            "user": {
+                "title": "优驾盒子",
+                "description": "如果您需要配置方面的帮助，请查看此处: https://github.com/dscao/gooddriver",
+                "data": {
+                    "api_key": "优驾抓包得到的API Key",
+                    "api_version": "ID",
+                    "name": "名称"
+                }
+            }
+        },
+        "error": {
+            "communication": "Key或ID 可能无效，请检查输入值."
+        },
+        "abort": {
+            "single_instance_allowed": "仅允许单个配置.",
+            "already_configured": "请勿重复配置."
+        }
+    },
+	"options": {
+        "step": {
+            "user":{
+                "data": {                    
+                    "attr_show": "属性中显示停车时间等更多信息",
+					"update_interval_seconds": "更新间隔时间(10-3600秒),建议设为90"
+                },
+                "description": "设置实体属性是否显示"
+            }
+        }
+    }
+
+}
