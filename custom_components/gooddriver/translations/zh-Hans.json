@@ -7,7 +7,7 @@
                 "description": "如果您需要配置方面的帮助，请查看此处: https://github.com/dscao/gooddriver",
                 "data": {
                     "api_key": "优驾抓包得到的API Key",
-                    "api_version": "ID",
+                    "user_id": "优驾抓包得到的ID",
                     "name": "名称"
                 }
             }
