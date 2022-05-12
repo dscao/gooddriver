@@ -59,7 +59,9 @@ from homeassistant.const import (
     ATTR_LATITUDE,
     ATTR_LONGITUDE,
     STATE_HOME,
-    STATE_NOT_HOME,    
+    STATE_NOT_HOME,
+    MAJOR_VERSION, 
+    MINOR_VERSION,
 )
 
 from .const import (
@@ -72,10 +74,10 @@ from .const import (
 )
 
 TYPE_GEOFENCE = "Geofence"
-__version__ = '2022.5.10'
+__version__ = '2022.5.12'
 
-_LOGGER = logging.getLogger(__name__)
-
+_LOGGER = logging.getLogger(__name__)   
+    
 PLATFORMS = ["device_tracker"]
 
 USER_AGENT = 'gooddriver/7.8.0 CFNetwork/1220.1 Darwin/20.3.0'
@@ -83,6 +85,9 @@ API_URL = "http://restcore.gooddriver.cn/API/Values/HudDeviceDetail/"
           
 async def async_setup(hass: HomeAssistant, config: Config) -> bool:
     """Set up configured gooddriver."""
+    # if (MAJOR_VERSION, MINOR_VERSION) < (2022, 4):
+        # _LOGGER.error("Minimum supported Hass version 2022.4")
+        # return False
     hass.data.setdefault(DOMAIN, {})
     return True
 
