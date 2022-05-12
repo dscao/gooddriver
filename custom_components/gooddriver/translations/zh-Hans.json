@@ -3,7 +3,7 @@
         "title": "优驾盒子联网版",
         "step": {
             "user": {
-                "title": "优驾盒子",
+                "title": "优驾盒子联网版",
                 "description": "如果您需要配置方面的帮助，请查看此处: https://github.com/dscao/gooddriver",
                 "data": {
                     "api_key": "优驾抓包得到的API Key",
