@@ -11,7 +11,7 @@ REQUIRED_FILES = [
     "services.yaml",
     "translations/en.json",
 ]
-VERSION = "2022.5.10"
+VERSION = "2022.5.12"
 ISSUE_URL = "https://github.com/dscao/gooddriver/issues"
 
 STARTUP = """
@@ -42,13 +42,13 @@ COORDINATOR = "coordinator"
 UNDO_UPDATE_LISTENER = "undo_update_listener"
 
 
-SENSOR_TYPES = {   
-    "update_time": {
-        ATTR_DEVICE_CLASS: None,
-        ATTR_ICON: "mdi:update",
-        ATTR_LABEL: "更新",
-    },
-}
-
+ATTR_SPEED = "speed"
+ATTR_COURSE = "course"
+ATTR_STATUS = "status"
+ATTR_RUNORSTOP = "runorstop"
+ATTR_LASTSTOPTIME = "laststoptime"
+ATTR_UPDATE_TIME = "update_time"
+ATTR_QUERYTIME = "querytime"
+ATTR_PARKING_TIME = "parking_time"
 
 
