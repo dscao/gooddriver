@@ -5,7 +5,7 @@ Github        : https://github.com/dscao
 Description   : 
 Date          : 2022-05-11
 LastEditors   : dscao
-LastEditTime  : 2022-05-12
+LastEditTime  : 2022-05-14
 '''
 """
 name: 'gooddriver'
@@ -74,7 +74,7 @@ from .const import (
 )
 
 TYPE_GEOFENCE = "Geofence"
-__version__ = '2022.5.12'
+__version__ = '2022.5.14'
 
 _LOGGER = logging.getLogger(__name__)   
     
@@ -82,6 +82,13 @@ PLATFORMS = ["device_tracker"]
 
 USER_AGENT = 'gooddriver/7.8.0 CFNetwork/1220.1 Darwin/20.3.0'
 API_URL = "http://restcore.gooddriver.cn/API/Values/HudDeviceDetail/" 
+
+laststoptime = "未知"
+lastlat = "未知"
+lastlon = "未知"
+runorstop = "未知"
+thislat = "未知"
+thislon = "未知"
           
 async def async_setup(hass: HomeAssistant, config: Config) -> bool:
     """Set up configured gooddriver."""
@@ -207,5 +214,57 @@ class gooddriverDataUpdateCoordinator(DataUpdateCoordinator):
         ) as error:
             raise UpdateFailed(error)
         _LOGGER.debug("Requests remaining: %s", url)
-        return {**resdata,"location_key":self.location_key}
+        
+        global laststoptime
+        global lastlat
+        global lastlon
+        global thislat
+        global thislon
+        global runorstop
+        global lastofflinetime
+        global lastonlinetime
+        global isonline
+        
+        data = resdata["MESSAGE"]
+        _LOGGER.debug("result data: %s", data)
+        if data:            
+            querytime = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            updatetime = data["HD_RECENT_LOCATION"]["Time"]
+            speed = data["HD_RECENT_LOCATION"]["Speed"]
+            course = data["HD_RECENT_LOCATION"]["Course"]
+            thislat = data["HD_RECENT_LOCATION"]["Lat"]
+            thislon = data["HD_RECENT_LOCATION"]["Lng"]
+            if data["HD_STATE"] == 1:
+                status = "车辆点火"
+            elif data["HD_STATE"] == 2:
+                status = "车辆熄火"
+            else:
+                status = "未知"
+                
+            if thislat == lastlat and thislon == lastlon and runorstop == "运动":
+                laststoptime = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                runorstop = "静止"
+            elif thislat != lastlat or thislon != lastlon:
+                lastlat = data["HD_RECENT_LOCATION"]["Lat"]
+                lastlon = data["HD_RECENT_LOCATION"]["Lng"]
+                runorstop = "运动"  
+                
+            def time_diff (timestamp):
+                result = datetime.datetime.now() - datetime.datetime.fromtimestamp(timestamp)
+                hours = int(result.seconds / 3600)
+                minutes = int(result.seconds % 3600 / 60)
+                seconds = result.seconds%3600%60
+                if result.days > 0:
+                    return("{0}天{1}小时{2}分钟".format(result.days,hours,minutes))
+                elif hours > 0:
+                    return("{0}小时{1}分钟".format(hours,minutes))
+                elif minutes > 0:
+                    return("{0}分钟{1}秒".format(minutes,seconds))
+                else:
+                    return("{0}秒".format(seconds))     
+            parkingtime=time_diff(int(time.mktime(time.strptime(data["HD_RECENT_LOCATION"]["Time"], "%Y-%m-%d %H:%M:%S"))))    
+            
+            
+        #return {**resdata,"location_key":self.location_key}
+        return {"location_key":self.location_key,"thislat":thislat,"thislon":thislon,"querytime":querytime,"status":status,"updatetime":updatetime,"speed":speed,"course":course,"laststoptime":laststoptime,"runorstop":runorstop,"parkingtime":parkingtime}
 
