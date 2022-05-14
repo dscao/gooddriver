@@ -234,6 +234,8 @@ class gooddriverDataUpdateCoordinator(DataUpdateCoordinator):
             course = data["HD_RECENT_LOCATION"]["Course"]
             thislat = data["HD_RECENT_LOCATION"]["Lat"]
             thislon = data["HD_RECENT_LOCATION"]["Lng"]
+            device_model = data["P_NAME"]
+            sw_version = data["HD_AUTH_CODE"]
             if data["HD_STATE"] == 1:
                 status = "车辆点火"
             elif data["HD_STATE"] == 2:
@@ -266,5 +268,5 @@ class gooddriverDataUpdateCoordinator(DataUpdateCoordinator):
             
             
         #return {**resdata,"location_key":self.location_key}
-        return {"location_key":self.location_key,"thislat":thislat,"thislon":thislon,"querytime":querytime,"status":status,"updatetime":updatetime,"speed":speed,"course":course,"laststoptime":laststoptime,"runorstop":runorstop,"parkingtime":parkingtime}
+        return {"location_key":self.location_key,"device_model":device_model,"sw_version":sw_version,"thislat":thislat,"thislon":thislon,"querytime":querytime,"status":status,"updatetime":updatetime,"speed":speed,"course":course,"laststoptime":laststoptime,"runorstop":runorstop,"parkingtime":parkingtime}
 
