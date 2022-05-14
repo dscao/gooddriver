@@ -74,7 +74,7 @@ from .const import (
 )
 
 TYPE_GEOFENCE = "Geofence"
-__version__ = '2022.5.14'
+__version__ = '2.0-2022.5.14'
 
 _LOGGER = logging.getLogger(__name__)   
     
@@ -83,12 +83,7 @@ PLATFORMS = ["device_tracker"]
 USER_AGENT = 'gooddriver/7.8.0 CFNetwork/1220.1 Darwin/20.3.0'
 API_URL = "http://restcore.gooddriver.cn/API/Values/HudDeviceDetail/" 
 
-laststoptime = "未知"
-lastlat = "未知"
-lastlon = "未知"
-runorstop = "未知"
-thislat = "未知"
-thislon = "未知"
+varstinydict = {}
           
 async def async_setup(hass: HomeAssistant, config: Config) -> bool:
     """Set up configured gooddriver."""
@@ -106,7 +101,15 @@ async def async_setup_entry(hass, config_entry) -> bool:
     attr_show = config_entry.options.get(CONF_ATTR_SHOW, True)
     location_key = config_entry.unique_id
 
+    varstinydict["thislat_"+location_key] = ""
+    varstinydict["thislon_"+location_key] = ""
+    varstinydict["lastlat_"+location_key] = ""
+    varstinydict["lastlon_"+location_key] = ""
+    varstinydict["laststoptime_"+location_key] = ""
+    varstinydict["runorstop_"+location_key] = ""
+    
     _LOGGER.debug("Using location_key: %s, user_id: %s, update_interval_seconds: %s", location_key, user_id, update_interval_seconds)
+    _LOGGER.debug("varstinydict: %s", varstinydict)
 
     websession = async_get_clientsession(hass)
 
@@ -195,6 +198,7 @@ class gooddriverDataUpdateCoordinator(DataUpdateCoordinator):
 
     async def _async_update_data(self):
         """Update data via library."""
+        _LOGGER.debug("varstinydict: %s", varstinydict)
         try:
             async with timeout(10): 
                 headers = {
@@ -215,16 +219,6 @@ class gooddriverDataUpdateCoordinator(DataUpdateCoordinator):
             raise UpdateFailed(error)
         _LOGGER.debug("Requests remaining: %s", url)
         
-        global laststoptime
-        global lastlat
-        global lastlon
-        global thislat
-        global thislon
-        global runorstop
-        global lastofflinetime
-        global lastonlinetime
-        global isonline
-        
         data = resdata["MESSAGE"]
         _LOGGER.debug("result data: %s", data)
         if data:            
@@ -232,10 +226,12 @@ class gooddriverDataUpdateCoordinator(DataUpdateCoordinator):
             updatetime = data["HD_RECENT_LOCATION"]["Time"]
             speed = data["HD_RECENT_LOCATION"]["Speed"]
             course = data["HD_RECENT_LOCATION"]["Course"]
-            thislat = data["HD_RECENT_LOCATION"]["Lat"]
-            thislon = data["HD_RECENT_LOCATION"]["Lng"]
             device_model = data["P_NAME"]
             sw_version = data["HD_AUTH_CODE"]
+            
+            thislat = varstinydict["thislat_"+self.location_key] = data["HD_RECENT_LOCATION"]["Lat"]
+            thislon = varstinydict["thislon_"+self.location_key] = data["HD_RECENT_LOCATION"]["Lng"]
+            
             if data["HD_STATE"] == 1:
                 status = "车辆点火"
             elif data["HD_STATE"] == 2:
@@ -243,14 +239,17 @@ class gooddriverDataUpdateCoordinator(DataUpdateCoordinator):
             else:
                 status = "未知"
                 
-            if thislat == lastlat and thislon == lastlon and runorstop == "运动":
-                laststoptime = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-                runorstop = "静止"
-            elif thislat != lastlat or thislon != lastlon:
-                lastlat = data["HD_RECENT_LOCATION"]["Lat"]
-                lastlon = data["HD_RECENT_LOCATION"]["Lng"]
-                runorstop = "运动"  
+            if varstinydict["thislat_"+self.location_key] == varstinydict["lastlat_"+self.location_key] and varstinydict["thislon_"+self.location_key] == varstinydict["lastlon_"+self.location_key] and varstinydict["runorstop_"+self.location_key] == "运动":
+                varstinydict["laststoptime_"+self.location_key] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                varstinydict["runorstop_"+self.location_key] = "静止"
+            elif varstinydict["thislat_"+self.location_key] != varstinydict["lastlat_"+self.location_key] or varstinydict["thislon_"+self.location_key] != varstinydict["lastlon_"+self.location_key]:
+                varstinydict["lastlat_"+self.location_key] = data["HD_RECENT_LOCATION"]["Lat"]
+                varstinydict["lastlon_"+self.location_key] = data["HD_RECENT_LOCATION"]["Lng"]
+                varstinydict["runorstop_"+self.location_key] = "运动"   
                 
+            laststoptime = varstinydict["laststoptime_"+self.location_key] 
+            runorstop =  varstinydict["runorstop_"+self.location_key]
+            
             def time_diff (timestamp):
                 result = datetime.datetime.now() - datetime.datetime.fromtimestamp(timestamp)
                 hours = int(result.seconds / 3600)
