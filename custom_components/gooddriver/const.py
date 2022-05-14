@@ -8,10 +8,9 @@ REQUIRED_FILES = [
     "manifest.json",
     "device_tracker.py",
     "config_flow.py",
-    "services.yaml",
     "translations/en.json",
 ]
-VERSION = "2022.5.12"
+VERSION = "2022.5.14"
 ISSUE_URL = "https://github.com/dscao/gooddriver/issues"
 
 STARTUP = """
