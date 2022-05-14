@@ -82,6 +82,8 @@ class gooddriverEntity(TrackerEntity):
             "name": self._name,
             "manufacturer": MANUFACTURER,
             "entry_type": DeviceEntryType.SERVICE,
+            "model": self.coordinator.data["device_model"],
+            "sw_version": self.coordinator.data["sw_version"],
         }
     @property
     def should_poll(self):
