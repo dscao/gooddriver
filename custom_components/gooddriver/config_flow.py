@@ -27,12 +27,12 @@ API_URL = "http://restcore.gooddriver.cn/API/Values/HudDeviceDetail/"
 _LOGGER = logging.getLogger(__name__)
 
 @config_entries.HANDLERS.register(DOMAIN)
-class gooddriverlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
+class FlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
     @staticmethod
     @callback
     def async_get_options_flow(config_entry):
         """Get the options flow for this handler."""
-        return gooddriverOptionsFlow(config_entry)
+        return OptionsFlow(config_entry)
 
     def __init__(self):
         """Initialize."""
@@ -115,7 +115,7 @@ class gooddriverlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
             if host == entry.data.get(CONF_NAME):
                 return True
 
-class gooddriverOptionsFlow(config_entries.OptionsFlow):
+class OptionsFlow(config_entries.OptionsFlow):
     """Config flow options for gooddriver."""
 
     def __init__(self, config_entry):
