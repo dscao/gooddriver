@@ -10,7 +10,7 @@ REQUIRED_FILES = [
     "config_flow.py",
     "translations/en.json",
 ]
-VERSION = "2022.5.14"
+VERSION = "2022.5.16"
 ISSUE_URL = "https://github.com/dscao/gooddriver/issues"
 
 STARTUP = """
@@ -33,7 +33,8 @@ MANUFACTURER = "gooddriver.cn."
 NAME = "gooddriver"
 
 CONF_USER_ID = "user_id"
-
+CONF_MAP_LAT = "map_lat"
+CONF_MAP_LNG = "map_lng"
 CONF_ATTR_SHOW = "attr_show"
 CONF_UPDATE_INTERVAL = "update_interval_seconds"
 
