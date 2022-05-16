@@ -14,6 +14,8 @@ from homeassistant import config_entries
 from homeassistant.core import callback
 from .const import (
     CONF_USER_ID,
+    CONF_MAP_LAT,
+    CONF_MAP_LNG,
     CONF_UPDATE_INTERVAL,
     CONF_ATTR_SHOW,
     DOMAIN,
@@ -139,6 +141,12 @@ class OptionsFlow(config_entries.OptionsFlow):
                         CONF_UPDATE_INTERVAL,
                         default=self.config_entry.options.get(CONF_UPDATE_INTERVAL, 90),
                     ): vol.All(vol.Coerce(int), vol.Range(min=10, max=3600)),vol.Optional(
+                        CONF_MAP_LAT,
+                        default=self.config_entry.options.get(CONF_MAP_LAT, 0.00240),
+                    ): vol.All(vol.Coerce(float), vol.Range(min=-1, max=1)),vol.Optional(
+                        CONF_MAP_LNG,
+                        default=self.config_entry.options.get(CONF_MAP_LNG, -0.00540),
+                    ): vol.All(vol.Coerce(float), vol.Range(min=-1, max=1)),vol.Optional(
                         CONF_ATTR_SHOW,
                         default=self.config_entry.options.get(CONF_ATTR_SHOW, True),
                     ): bool
