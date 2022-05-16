@@ -1,4 +1,3 @@
-
 """Constants for gooddriver."""
 DOMAIN = "gooddriver"
 
@@ -50,5 +49,3 @@ ATTR_LASTSTOPTIME = "laststoptime"
 ATTR_UPDATE_TIME = "update_time"
 ATTR_QUERYTIME = "querytime"
 ATTR_PARKING_TIME = "parking_time"
-
-
