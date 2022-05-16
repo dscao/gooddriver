@@ -5,7 +5,7 @@ Github        : https://github.com/dscao
 Description   : 
 Date          : 2022-05-11
 LastEditors   : dscao
-LastEditTime  : 2022-05-14
+LastEditTime  : 2022-05-16
 '''
 """
 name: 'gooddriver'
@@ -66,6 +66,8 @@ from homeassistant.const import (
 
 from .const import (
     CONF_USER_ID,
+    CONF_MAP_LAT,
+    CONF_MAP_LNG,
     COORDINATOR,
     DOMAIN,
     UNDO_UPDATE_LISTENER,
@@ -74,7 +76,7 @@ from .const import (
 )
 
 TYPE_GEOFENCE = "Geofence"
-__version__ = '2.0-2022.5.14'
+__version__ = '2022.5.18'
 
 _LOGGER = logging.getLogger(__name__)   
     
