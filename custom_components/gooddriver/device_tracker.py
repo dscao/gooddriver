@@ -108,7 +108,7 @@ class gooddriverEntity(TrackerEntity):
         
     @property
     def source_type(self):
-        return "GPS"
+        return "gps"
 
     @property
     def latitude(self):                
@@ -120,7 +120,7 @@ class gooddriverEntity(TrackerEntity):
         
     @property
     def location_accuracy(self):
-        return 10        
+        return 0        
 
     @property
     def state_attributes(self): 
