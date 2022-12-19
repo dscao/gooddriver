@@ -1,3 +1,4 @@
+
 """Constants for gooddriver."""
 DOMAIN = "gooddriver"
 
@@ -34,6 +35,7 @@ NAME = "gooddriver"
 CONF_USER_ID = "user_id"
 CONF_MAP_LAT = "map_lat"
 CONF_MAP_LNG = "map_lng"
+CONF_GPS_CONVER = "gps_conver"
 CONF_ATTR_SHOW = "attr_show"
 CONF_UPDATE_INTERVAL = "update_interval_seconds"
 
@@ -49,3 +51,5 @@ ATTR_LASTSTOPTIME = "laststoptime"
 ATTR_UPDATE_TIME = "update_time"
 ATTR_QUERYTIME = "querytime"
 ATTR_PARKING_TIME = "parking_time"
+
+
