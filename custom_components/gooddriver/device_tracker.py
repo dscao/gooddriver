@@ -57,7 +57,8 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
 
 class gooddriverEntity(TrackerEntity):
     """Representation of a tracker condition."""
-    
+    _attr_has_entity_name = True
+    _attr_name = None
     def __init__(self, name, gps_conver, attr_show, coordinator):
         
         self.coordinator = coordinator
