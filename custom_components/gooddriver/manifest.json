@@ -1,12 +1,12 @@
 {
   "domain": "gooddriver",
   "name": "gooddriver",
-  "documentation": "https://github.com/dscao/gooddriver",
-  "issue_tracker": "https://github.com/dscao/gooddriver/issues",
-  "dependencies": [],
-  "version": "1.2",
-  "iot_class": "cloud_polling", 
-  "config_flow": true,
   "codeowners": ["@dscao"],
-  "requirements": []
+  "config_flow": true,
+  "dependencies": [],
+  "documentation": "https://github.com/dscao/gooddriver",  
+  "iot_class": "cloud_polling", 
+  "issue_tracker": "https://github.com/dscao/gooddriver/issues",  
+  "requirements": [],
+  "version": "1.2"
 }
