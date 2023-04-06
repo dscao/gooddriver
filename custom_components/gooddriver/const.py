@@ -10,7 +10,7 @@ REQUIRED_FILES = [
     "config_flow.py",
     "translations/en.json",
 ]
-VERSION = "2022.5.16"
+VERSION = "2023.4.1"
 ISSUE_URL = "https://github.com/dscao/gooddriver/issues"
 
 STARTUP = """
@@ -49,7 +49,7 @@ ATTR_STATUS = "status"
 ATTR_RUNORSTOP = "runorstop"
 ATTR_LASTSTOPTIME = "laststoptime"
 ATTR_UPDATE_TIME = "update_time"
-ATTR_QUERYTIME = "querytime"
+ATTR_QUERYTIME = "query_time"
 ATTR_PARKING_TIME = "parking_time"
 
 

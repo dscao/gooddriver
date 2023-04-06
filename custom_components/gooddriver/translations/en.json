@@ -31,5 +31,68 @@
                 "description": "Set Entity Attributes"
             }
         }
-    }
+    },
+	"entity": {
+		"device_tracker": {
+			"gooddriver_device_tracker": {
+				"name": "gooddriver",
+				"state_attributes": {
+					"speed": {
+					  "name": "Speed"
+					},
+					"course": {
+					  "name": "Course"
+					},
+					"status": {
+					  "name": "status",
+					  "state": {
+						"车辆点火": "Vehicle ignition",
+						"车辆熄火": "Vehicle stalled",
+						"未知": "Unknown"
+					  }
+					},
+					"update_time": {
+					  "name": "update time"
+					},
+					"query_time": {
+					  "name": "query time"
+					},
+					"runorstop": {
+					  "name": "run or stop",
+					  "state": {
+						"静止": "Stopped",
+						"运动": "Running"
+					  }
+					},
+					"laststoptime": {
+					  "name": "laststoptime"
+					},
+					"parking_time": {
+					  "name": "parking time"
+					},
+					"battery": {
+					  "name": "Battery"
+					},
+					"gps_accuracy": {
+					  "name": "GPS accuracy"
+					},
+					"latitude": {
+					  "name": "Latitude"
+					},
+					"longitude": {
+					  "name": "Longitude"
+					},
+					"source_type": {
+					  "name": "Source",
+					  "state": {
+						"bluetooth_le": "Bluetooth LE",
+						"bluetooth": "Bluetooth",
+						"gps": "GPS",
+						"router": "Router"
+					  }
+					}
+			    }
+			}
+		}
+	}
 }

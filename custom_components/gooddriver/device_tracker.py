@@ -58,7 +58,8 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
 class gooddriverEntity(TrackerEntity):
     """Representation of a tracker condition."""
     _attr_has_entity_name = True
-    _attr_name = None
+    # _attr_name = None
+    _attr_translation_key = "gooddriver_device_tracker"
     def __init__(self, name, gps_conver, attr_show, coordinator):
         
         self.coordinator = coordinator
@@ -73,9 +74,9 @@ class gooddriverEntity(TrackerEntity):
         else:
             self._coords = [self.coordinator.data["thislon"], self.coordinator.data["thislat"]]
 
-    @property
-    def name(self):            
-        return self._name
+    # @property
+    # def name(self):            
+        # return self._name
         
      
     @property
@@ -124,7 +125,7 @@ class gooddriverEntity(TrackerEntity):
         
     @property
     def location_accuracy(self):
-        return 10        
+        return 0        
 
     @property
     def state_attributes(self): 
@@ -132,10 +133,9 @@ class gooddriverEntity(TrackerEntity):
         #data = self.coordinator.data.get("result")
         data = self.coordinator.data
         if data:             
-            attrs["speed"] = data["speed"]
-            attrs["speed"] = data["speed"]
+            attrs[ATTR_SPEED] = data["speed"]
             attrs[ATTR_STATUS] = data["status"]
-            attrs["updatetime"] = data["updatetime"]        
+            attrs[ATTR_UPDATE_TIME] = data["updatetime"]        
             attrs[ATTR_QUERYTIME] = data["querytime"]
             if self._attr_show == True:
                 attrs[ATTR_RUNORSTOP] = data["runorstop"]
