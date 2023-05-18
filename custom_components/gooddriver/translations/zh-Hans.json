@@ -24,11 +24,12 @@
         "step": {
             "user":{
                 "data": {                    
-                    "attr_show": "属性中显示停车时间等更多信息",
+                    "attr_show": "属性中显示停车时间等更多信息，但会不断刷新实体的“上次更新”时间",
 					"gps_conver": "将GCJ02(火星坐标系)转GPS84",
-					"update_interval_seconds": "更新间隔时间(10-3600秒),建议设为90"
+					"update_interval_seconds": "更新间隔时间(10-3600秒),建议设为90",
+					"sensors": "传感器"
                 },
-                "description": "设置实体属性是否显示"
+                "description": "更多可选设置"
             }
         }
     },
@@ -43,18 +44,21 @@
 					"course": {
 					  "name": "行车方向"
 					},
-					"status": {
-					  "name": "当前状态",
+					"device_status": {
+					  "name": "设备状态",
 					  "state": {
 						"车辆点火": "车辆点火",
 						"车辆熄火": "车辆熄火",
 						"未知": "未知"
 					  }
 					},
-					"update_time": {
-					  "name": "更新时间"
+					"status": {
+					  "name": "状态"		
 					},
-					"query_time": {
+					"last_update": {
+					  "name": "最后更新"
+					},
+					"querytime": {
 					  "name": "查询时间"
 					},
 					"runorstop": {
@@ -67,7 +71,7 @@
 					"laststoptime": {
 					  "name": "上次停止时间"
 					},
-					"parking_time": {
+					"parkingtime": {
 					  "name": "停车时长"
 					},
 					"battery": {
@@ -93,6 +97,18 @@
 					}
 			    }
 			}
-		}
+		},
+		"sensor": {
+			"gooddriver_address":{
+				"name": "地址"
+			},
+			"gooddriver_parkingtime":{
+				"name": "停车时长"
+			},
+			"gooddriver_querytime":{
+				"name": "查询时间"
+			}
+	    }			
+		
 	}
 }

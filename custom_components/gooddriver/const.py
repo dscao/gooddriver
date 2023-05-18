@@ -3,14 +3,19 @@
 DOMAIN = "gooddriver"
 
 PLATFORMS = ["sensor"]
+
+DEVICE_TRACKERS = "devices"
+SENSORS = "sensors"
+
 REQUIRED_FILES = [
     "const.py",
     "manifest.json",
     "device_tracker.py",
     "config_flow.py",
     "translations/en.json",
+    "translations/zh-Hans.json",
 ]
-VERSION = "2023.4.1"
+VERSION = "2023.5.1"
 ISSUE_URL = "https://github.com/dscao/gooddriver/issues"
 
 STARTUP = """
@@ -38,18 +43,24 @@ CONF_MAP_LNG = "map_lng"
 CONF_GPS_CONVER = "gps_conver"
 CONF_ATTR_SHOW = "attr_show"
 CONF_UPDATE_INTERVAL = "update_interval_seconds"
+CONF_SENSORS = "sensors"
 
 COORDINATOR = "coordinator"
 UNDO_UPDATE_LISTENER = "undo_update_listener"
 
+KEY_ADDRESS = "address"
+KEY_QUERYTIME = "querytime"
+KEY_PARKING_TIME = "parkingtime"
 
 ATTR_SPEED = "speed"
 ATTR_COURSE = "course"
 ATTR_STATUS = "status"
+ATTR_DEVICE_STATUS = "device_status"
 ATTR_RUNORSTOP = "runorstop"
 ATTR_LASTSTOPTIME = "laststoptime"
-ATTR_UPDATE_TIME = "update_time"
-ATTR_QUERYTIME = "query_time"
-ATTR_PARKING_TIME = "parking_time"
+ATTR_LAST_UPDATE = "last_update"
+ATTR_QUERYTIME = "querytime"
+ATTR_PARKING_TIME = "parkingtime"
+ATTR_ADDRESS = "address"
 
 

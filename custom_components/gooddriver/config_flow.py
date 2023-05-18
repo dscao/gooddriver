@@ -18,6 +18,10 @@ from .const import (
     CONF_UPDATE_INTERVAL,
     CONF_ATTR_SHOW,
     DOMAIN,
+    CONF_SENSORS,
+    KEY_QUERYTIME,
+    KEY_PARKING_TIME,
+    KEY_ADDRESS,
 )
 
 import voluptuous as vol
@@ -26,6 +30,13 @@ USER_AGENT = 'gooddriver/7.8.0 CFNetwork/1220.1 Darwin/20.3.0'
 API_URL = "http://restcore.gooddriver.cn/API/Values/HudDeviceDetail/"    
 
 _LOGGER = logging.getLogger(__name__)
+
+
+SENSOR_LIST = {
+    KEY_ADDRESS: "Address",
+    KEY_PARKING_TIME: "Parking_time",
+}
+
 
 @config_entries.HANDLERS.register(DOMAIN)
 class FlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
@@ -136,16 +147,10 @@ class OptionsFlow(config_entries.OptionsFlow):
             step_id="user",
             data_schema=vol.Schema(
                 {
-                    vol.Optional(
-                        CONF_UPDATE_INTERVAL,
-                        default=self.config_entry.options.get(CONF_UPDATE_INTERVAL, 90),
-                    ): vol.All(vol.Coerce(int), vol.Range(min=10, max=3600)), vol.Optional(
-                        CONF_GPS_CONVER,
-                        default=self.config_entry.options.get(CONF_GPS_CONVER, True),
-                    ): bool, vol.Optional(
-                        CONF_ATTR_SHOW,
-                        default=self.config_entry.options.get(CONF_ATTR_SHOW, True),
-                    ): bool
+                    vol.Optional(CONF_UPDATE_INTERVAL, default=self.config_entry.options.get(CONF_UPDATE_INTERVAL, 90),): vol.All(vol.Coerce(int), vol.Range(min=10, max=3600)), 
+                    vol.Optional(CONF_GPS_CONVER, default=self.config_entry.options.get(CONF_GPS_CONVER, True),): bool, 
+                    vol.Optional(CONF_ATTR_SHOW, default=self.config_entry.options.get(CONF_ATTR_SHOW, True),): bool, 
+                    vol.Optional(CONF_SENSORS, default=self.config_entry.options.get(CONF_SENSORS)): cv.multi_select(SENSOR_LIST),
                 }
             ),
         )

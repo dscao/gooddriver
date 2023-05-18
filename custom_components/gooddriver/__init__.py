@@ -53,6 +53,7 @@ from homeassistant.util import slugify
 from homeassistant.util.location import distance
 
 from homeassistant.const import (
+    Platform,
     CONF_NAME,
     CONF_API_KEY,
     ATTR_GPS_ACCURACY,
@@ -70,17 +71,19 @@ from .const import (
     CONF_MAP_LNG,
     COORDINATOR,
     DOMAIN,
+    DEVICE_TRACKERS,
+    SENSORS,
     UNDO_UPDATE_LISTENER,
     CONF_ATTR_SHOW,
     CONF_UPDATE_INTERVAL,
 )
 
 TYPE_GEOFENCE = "Geofence"
-__version__ = '2022.5.18'
+__version__ = '2023.5.18'
 
 _LOGGER = logging.getLogger(__name__)   
     
-PLATFORMS = ["device_tracker"]
+PLATFORMS = [Platform.DEVICE_TRACKER, Platform.SENSOR]
 
 USER_AGENT = 'gooddriver/7.8.0 CFNetwork/1220.1 Darwin/20.3.0'
 API_URL = "http://restcore.gooddriver.cn/API/Values/HudDeviceDetail/" 

@@ -5,7 +5,6 @@ import time, datetime
 from homeassistant.components.device_tracker.config_entry import TrackerEntity
 from homeassistant.helpers.device_registry import DeviceEntryType
 
-#from homeassistant.helpers.entity import Entity
 from .helper import gcj02towgs84
 
 from homeassistant.const import (
@@ -31,9 +30,10 @@ from .const import (
     ATTR_SPEED,
     ATTR_COURSE,
     ATTR_STATUS,
+    ATTR_DEVICE_STATUS,
     ATTR_RUNORSTOP,
     ATTR_LASTSTOPTIME,
-    ATTR_UPDATE_TIME,
+    ATTR_LAST_UPDATE,
     ATTR_QUERYTIME,
     ATTR_PARKING_TIME,
 )
@@ -50,7 +50,7 @@ async def async_setup_entry(hass, config_entry, async_add_entities):
     gps_conver = config_entry.options.get(CONF_GPS_CONVER, True)
     attr_show = config_entry.options.get(CONF_ATTR_SHOW, True)
     coordinator = hass.data[DOMAIN][config_entry.entry_id][COORDINATOR]
-    _LOGGER.debug("user_id: %s ,coordinator result: %s", name, coordinator.data)
+    _LOGGER.debug("user_id: %s ,coordinator device_tracker: %s", name, coordinator.data)
 
     async_add_entities([gooddriverEntity(name, gps_conver, attr_show, coordinator)], False)
 
@@ -134,13 +134,13 @@ class gooddriverEntity(TrackerEntity):
         data = self.coordinator.data
         if data:             
             attrs[ATTR_SPEED] = data["speed"]
-            attrs[ATTR_STATUS] = data["status"]
-            attrs[ATTR_UPDATE_TIME] = data["updatetime"]        
-            attrs[ATTR_QUERYTIME] = data["querytime"]
+            attrs[ATTR_DEVICE_STATUS] = data["status"]
+            attrs[ATTR_LAST_UPDATE] = data["updatetime"]
             if self._attr_show == True:
                 attrs[ATTR_RUNORSTOP] = data["runorstop"]
                 attrs[ATTR_LASTSTOPTIME] = data["laststoptime"]
-                attrs[ATTR_PARKING_TIME] = data["parkingtime"]  
+                attrs[ATTR_PARKING_TIME] = data["parkingtime"]
+                attrs[ATTR_QUERYTIME] = data["querytime"]
         return attrs 
 
     async def async_added_to_hass(self):
