@@ -33,6 +33,14 @@
             }
         }
     },
+	"selector": {
+		"sensors": {
+			"options": {
+				"last_update": "最后更新",
+				"parkingtime": "停车时长"
+			}
+		}
+	},
 	"entity": {
 		"device_tracker": {
 			"gooddriver_device_tracker": {
@@ -99,14 +107,16 @@
 			}
 		},
 		"sensor": {
-			"gooddriver_address":{
-				"name": "地址"
+			"parkingtime": {
+				"name": "停车时长",
+				"state_attributes": {
+					"querytime": {
+					  "name": "查询时间"
+					}
+				}
 			},
-			"gooddriver_parkingtime":{
-				"name": "停车时长"
-			},
-			"gooddriver_querytime":{
-				"name": "查询时间"
+			"last_update": {
+				"name": "最后更新"
 			}
 	    }			
 		

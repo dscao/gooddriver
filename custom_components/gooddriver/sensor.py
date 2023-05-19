@@ -39,12 +39,12 @@ _LOGGER = logging.getLogger(__name__)
 SENSOR_TYPES: tuple[SensorEntityDescription, ...] = (
     SensorEntityDescription(
         key=KEY_ADDRESS,
-        name="Address",
+        name="address",
         icon="mdi:map"
     ),
     SensorEntityDescription(
         key=KEY_PARKING_TIME,
-        name="Parking time",
+        name="parkingtime",
         icon="mdi:timer-stop-outline"
     )
 )
@@ -76,8 +76,6 @@ class gooddriverSensorEntity(CoordinatorEntity):
     """Define an bjtoon_health_code entity."""
     
     _attr_has_entity_name = True
-
-    #_attr_translation_key = "gooddriver_sensor"
        
     def __init__(self, device_name, description, coordinator):
         """Initialize."""
@@ -89,7 +87,8 @@ class gooddriverSensorEntity(CoordinatorEntity):
         
         _LOGGER.debug("SensorEntity coordinator: %s", coordinator.data)
 
-        self._attr_name = f"{self.entity_description.name}"
+        #self._attr_name = f"{self.entity_description.name}"
+        self._attr_translation_key = f"{self.entity_description.name}"
         if self.entity_description.key == KEY_PARKING_TIME:
             self._state = self.coordinator.data.get(ATTR_PARKING_TIME)
         elif self.entity_description.key == KEY_ADDRESS:

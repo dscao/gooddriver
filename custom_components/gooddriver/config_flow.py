@@ -33,9 +33,8 @@ _LOGGER = logging.getLogger(__name__)
 
 
 SENSOR_LIST = {
-    KEY_PARKING_TIME: "Parking_time",
+    KEY_PARKING_TIME: "parkingtime"
 }
-
 
 @config_entries.HANDLERS.register(DOMAIN)
 class FlowHandler(config_entries.ConfigFlow, domain=DOMAIN):

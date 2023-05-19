@@ -33,6 +33,14 @@
             }
         }
     },
+	"selector": {
+		"sensors": {
+			"options": {
+				"last_update": "Last update",
+				"parkingtime": "Parking Time"
+			}
+		}
+	},
 	"entity": {
 		"device_tracker": {
 			"gooddriver_device_tracker": {
@@ -103,7 +111,12 @@
 				"name": "Address"
 			},
 			"gooddriver_parkingtime":{
-				"name": "Parking Time"
+				"name": "Parking Time",
+				"state_attributes": {
+					"querytime": {
+					  "name": "query time"
+					}
+				}
 			},
 			"gooddriver_querytime":{
 				"name": "Query Time"
