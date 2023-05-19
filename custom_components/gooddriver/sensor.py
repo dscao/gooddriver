@@ -25,7 +25,6 @@ from homeassistant.const import CONF_NAME
 from .const import (
     COORDINATOR,
     DOMAIN,
-    SENSORS,
     MANUFACTURER,
     CONF_SENSORS,
     ATTR_ADDRESS,

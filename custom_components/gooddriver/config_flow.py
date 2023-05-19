@@ -33,7 +33,6 @@ _LOGGER = logging.getLogger(__name__)
 
 
 SENSOR_LIST = {
-    KEY_ADDRESS: "Address",
     KEY_PARKING_TIME: "Parking_time",
 }
 

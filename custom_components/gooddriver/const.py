@@ -2,10 +2,7 @@
 """Constants for gooddriver."""
 DOMAIN = "gooddriver"
 
-PLATFORMS = ["sensor"]
-
 DEVICE_TRACKERS = "devices"
-SENSORS = "sensors"
 
 REQUIRED_FILES = [
     "const.py",
