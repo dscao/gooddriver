@@ -158,8 +158,7 @@ class gooddriverSensorEntity(CoordinatorEntity):
 
     async def async_update(self):
         """Update gooddriver entity."""
-        await self.coordinator.async_request_refresh()
-        
+        #await self.coordinator.async_request_refresh()        
         if self.entity_description.key == KEY_PARKING_TIME:
             self._state = self.coordinator.data.get(ATTR_PARKING_TIME)
         elif self.entity_description.key == KEY_LASTSTOPTIME:

@@ -152,7 +152,7 @@ class gooddriverEntity(TrackerEntity):
     async def async_update(self):
         """Update gooddriver entity."""
         _LOGGER.debug(datetime.datetime.now(datetime.timezone.utc).astimezone().tzinfo)
-        await self.coordinator.async_request_refresh()
+        #await self.coordinator.async_request_refresh()
         if self._gps_conver == True:
             self._coords = gcj02towgs84(self.coordinator.data["thislon"], self.coordinator.data["thislat"])
         else:
