@@ -116,7 +116,12 @@
 				}
 			},
 			"laststoptime": {
-				"name": "Last Stop time"
+				"name": "Last Stop time",
+				"state_attributes": {
+					"querytime": {
+					  "name": "query time"
+					}
+				}
 			}
 	    }
 	}

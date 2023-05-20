@@ -116,7 +116,12 @@
 				}
 			},
 			"laststoptime": {
-				"name": "上次停止时间"
+				"name": "上次停止时间",
+				"state_attributes": {
+					"querytime": {
+					  "name": "查询时间"
+					}
+				}
 			}
 	    }			
 		
