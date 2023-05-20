@@ -36,7 +36,7 @@
 	"selector": {
 		"sensors": {
 			"options": {
-				"last_update": "Last update",
+				"laststoptime": "Last stop time",
 				"parkingtime": "Parking Time"
 			}
 		}
@@ -107,20 +107,17 @@
 			}
 		},
 		"sensor": {
-			"gooddriver_address":{
-				"name": "Address"
-			},
-			"gooddriver_parkingtime":{
-				"name": "Parking Time",
+			"parkingtime": {
+				"name": "Parking time",
 				"state_attributes": {
 					"querytime": {
 					  "name": "query time"
 					}
 				}
 			},
-			"gooddriver_querytime":{
-				"name": "Query Time"
+			"laststoptime": {
+				"name": "Last Stop time"
 			}
-	    }	
+	    }
 	}
 }
