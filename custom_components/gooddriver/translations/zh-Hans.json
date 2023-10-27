@@ -25,7 +25,7 @@
             "user":{
                 "data": {                    
                     "attr_show": "属性中显示停车时间等更多信息，但会不断刷新实体的“上次更新”时间",
-					"gps_conver": "将GCJ02(火星坐标系)转GPS84",
+					"gps_conver": "原始数据为GCJ02(火星坐标系)，坐标转化为GPS84",
 					"update_interval_seconds": "更新间隔时间(10-3600秒),建议设为90",
 					"sensors": "传感器"
                 },
@@ -93,6 +93,12 @@
 					},
 					"longitude": {
 					  "name": "经度"
+					},
+                    "map_gcj_lat": {
+					  "name": "高德地图纬度"
+					},
+					"map_gcj_lng": {
+					  "name": "高德地图经度"
 					},
 					"source_type": {
 					  "name": "数据源",
