@@ -27,7 +27,9 @@
                     "attr_show": "属性中显示停车时间等更多信息，但会不断刷新实体的“上次更新”时间",
 					"gps_conver": "原始数据为GCJ02(火星坐标系)，坐标转化为GPS84",
 					"update_interval_seconds": "更新间隔时间(10-3600秒),建议设为90",
-					"sensors": "传感器"
+					"sensors": "传感器",
+                    "addressapi": "地址获取接口，使用 API 前请您先注册：[高德账号Web服务申请Key](https://lbs.amap.com/dev/key) ， [百度账号Web API接口申请Key](https://lbsyun.baidu.com/) 。",
+                    "api_key": "接口密钥，为空时不获取地址"
                 },
                 "description": "更多可选设置"
             }
@@ -38,6 +40,13 @@
 			"options": {
 				"laststoptime": "上次停止时间",
 				"parkingtime": "停车时长"
+			}
+		},
+        "addressapi": {
+			"options": {
+                "none": "不获取地址",
+				"baidu": "百度地图逆地理接口",
+				"gaode": "高德地图逆地理接口"
 			}
 		}
 	},
@@ -85,6 +94,9 @@
 					"battery": {
 					  "name": "电池电量"
 					},
+					"address": {
+					  "name": "地址"
+					},
 					"gps_accuracy": {
 					  "name": "GPS精度"
 					},
@@ -99,6 +111,12 @@
 					},
 					"map_gcj_lng": {
 					  "name": "高德地图经度"
+					},
+                    "map_bd_lat": {
+					  "name": "百度地图纬度"
+					},
+					"map_bd_lng": {
+					  "name": "百度地图经度"
 					},
 					"source_type": {
 					  "name": "数据源",

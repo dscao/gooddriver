@@ -24,6 +24,8 @@ from .const import (
     KEY_PARKING_TIME,
     KEY_LASTSTOPTIME,
     KEY_ADDRESS,
+    CONF_ADDRESSAPI,
+    CONF_API_KEY,
 )
 
 import voluptuous as vol
@@ -96,7 +98,7 @@ class FlowHandler(config_entries.ConfigFlow, domain=DOMAIN):
     async def _show_config_form(self, user_input):
 
         # Defaults
-        device_name = "gooddriver"
+        device_name = "优驾盒子联网版"
         data_schema = OrderedDict()
         data_schema[vol.Required(CONF_NAME, default=device_name)] = str
         data_schema[vol.Required(CONF_USER_ID, default="100000")] = str
@@ -145,7 +147,7 @@ class OptionsFlow(config_entries.OptionsFlow):
                     vol.Optional(CONF_UPDATE_INTERVAL, default=self.config_entry.options.get(CONF_UPDATE_INTERVAL, 90),): vol.All(vol.Coerce(int), vol.Range(min=10, max=3600)), 
                     vol.Optional(CONF_GPS_CONVER, default=self.config_entry.options.get(CONF_GPS_CONVER, True),): bool, 
                     vol.Optional(CONF_ATTR_SHOW, default=self.config_entry.options.get(CONF_ATTR_SHOW, True),): bool, 
-                    vol.Optional(CONF_SENSORS, default=self.config_entry.options.get(CONF_SENSORS)): SelectSelector(
+                    vol.Optional(CONF_SENSORS, default=self.config_entry.options.get(CONF_SENSORS,[])): SelectSelector(
                         SelectSelectorConfig(
                             options=[
                                 {"value": KEY_PARKING_TIME, "label": "parkingtime"},
@@ -153,7 +155,24 @@ class OptionsFlow(config_entries.OptionsFlow):
                             ], 
                             multiple=True,translation_key=CONF_SENSORS
                         )
-                    )
+                    ),
+                    vol.Optional(
+                        CONF_ADDRESSAPI, 
+                        default=self.config_entry.options.get(CONF_ADDRESSAPI,"none")
+                    ): SelectSelector(
+                        SelectSelectorConfig(
+                            options=[
+                                {"value": "none", "label": "none"},
+                                {"value": "baidu", "label": "baidu"},
+                                {"value": "gaode", "label": "gaode"}
+                            ], 
+                            multiple=False,translation_key=CONF_ADDRESSAPI
+                        )
+                    ),                    
+                    vol.Optional(
+                        CONF_API_KEY, 
+                        default=self.config_entry.options.get(CONF_API_KEY,"")
+                    ): str, 
                 }
             ),
         )
