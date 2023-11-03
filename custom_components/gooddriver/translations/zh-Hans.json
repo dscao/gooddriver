@@ -28,7 +28,7 @@
 					"gps_conver": "原始数据为GCJ02(火星坐标系)，坐标转化为GPS84",
 					"update_interval_seconds": "更新间隔时间(10-3600秒),建议设为90",
 					"sensors": "传感器",
-                    "addressapi": "地址获取接口，使用 API 前请您先注册：[高德账号Web服务申请Key](https://lbs.amap.com/dev/key) ， [百度账号Web API接口申请Key](https://lbsyun.baidu.com/) 。",
+                    "addressapi": "地址获取接口，使用 API 前请您先注册: [高德账号](https://lbs.amap.com/dev/key) , [百度账号](https://lbsyun.baidu.com/) 。",
                     "api_key": "接口密钥，为空时不获取地址"
                 },
                 "description": "更多可选设置"

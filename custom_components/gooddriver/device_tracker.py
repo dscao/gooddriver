@@ -198,7 +198,8 @@ class gooddriverEntity(TrackerEntity):
                     self._coords_old = self._coords
                 elif self._addressapi == "gaode" and self._api_key:
                     _LOGGER.debug("gaode:"+self._api_key)
-                    addressdata = await self._hass.async_add_executor_job(self.get_gaode_geocoding, self._coords[1], self._coords[0])               
+                    gcjdata = wgs84togcj02(self._coords[0], self._coords[1])
+                    addressdata = await self._hass.async_add_executor_job(self.get_gaode_geocoding, gcjdata[1], gcjdata[0])               
                     self._address = addressdata['regeocode']['formatted_address']
                     self._coords_old = self._coords
                 else:
@@ -230,7 +231,7 @@ class gooddriverEntity(TrackerEntity):
     def get_gaode_geocoding(self, lat, lng):
         api_url = 'https://restapi.amap.com/v3/geocode/regeo'
         location = str("{:.6f}".format(lng))+','+str("{:.6f}".format(lat))
-        url = api_url+'?key='+self._api_key+'&output=json&coordtype=wgs84ll&extensions=base&location='+location       
+        url = api_url+'?key='+self._api_key+'&output=json&extensions=base&location='+location       
         response = self.get_data(url)
         _LOGGER.debug(response)
         return response
