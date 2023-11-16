@@ -1,4 +1,4 @@
-"""Support for the gooddriver service."""
+"""Support for the autoamap service."""
 import logging
 import time, datetime
 import requests
@@ -27,6 +27,8 @@ from homeassistant.const import (
 
 from .const import (
     CONF_USER_ID,
+    CONF_PARAMDATA,
+    CONF_XUHAO,
     CONF_GPS_CONVER,
     COORDINATOR,
     DOMAIN,
@@ -44,7 +46,7 @@ from .const import (
     ATTR_PARKING_TIME,
     ATTR_ADDRESS,
     CONF_ADDRESSAPI,
-    CONF_API_KEY,
+    CONF_ADDRESSAPI_KEY,
     CONF_PRIVATE_KEY,
     CONF_MAP_GCJ_LAT,
     CONF_MAP_GCJ_LNG,
@@ -52,32 +54,31 @@ from .const import (
     CONF_MAP_BD_LNG, 
 )
 
-
 PARALLEL_UPDATES = 1
 _LOGGER = logging.getLogger(__name__)
 
-
+SCAN_INTERVAL = datetime.timedelta(seconds=60)
 
 async def async_setup_entry(hass, config_entry, async_add_entities):
-    """Add gooddriver entities from a config_entry."""
+    """Add autoamap entities from a config_entry."""
     name = config_entry.data[CONF_NAME]
     gps_conver = config_entry.options.get(CONF_GPS_CONVER, True)
     attr_show = config_entry.options.get(CONF_ATTR_SHOW, True)
     addressapi = config_entry.options.get(CONF_ADDRESSAPI, "none")
-    api_key = config_entry.options.get(CONF_API_KEY, "")
+    api_key = config_entry.options.get(CONF_ADDRESSAPI_KEY, "")
     private_key = config_entry.options.get(CONF_PRIVATE_KEY, "")
     coordinator = hass.data[DOMAIN][config_entry.entry_id][COORDINATOR]
-    _LOGGER.debug("user_id: %s ,coordinator device_tracker: %s", name, coordinator.data)
+    _LOGGER.debug("user_id: %s ,coordinator result: %s", name, coordinator.data)
 
-    async_add_entities([gooddriverEntity(hass, name, gps_conver, attr_show, addressapi, api_key, private_key, coordinator)], False)
+    async_add_entities([autoamapEntity(hass, name, gps_conver, attr_show, addressapi, api_key, private_key, coordinator)], False)
 
-        
-class gooddriverEntity(TrackerEntity):
+
+class autoamapEntity(TrackerEntity):
     """Representation of a tracker condition."""
     _attr_has_entity_name = True
     _attr_name = None
-    _attr_translation_key = "gooddriver_device_tracker"
-    def __init__(self, hass, name, gps_conver, attr_show, addressapi, api_key, private_key, coordinator):        
+    _attr_translation_key = "autoamap_device_tracker"
+    def __init__(self, hass, name, gps_conver, attr_show, addressapi, api_key, private_key, coordinator):
         self._hass = hass
         self._addressapi = addressapi
         self._api_key = api_key
@@ -151,17 +152,19 @@ class gooddriverEntity(TrackerEntity):
 
     @property
     def state_attributes(self): 
-        attrs = super(gooddriverEntity, self).state_attributes
+        attrs = super(autoamapEntity, self).state_attributes
         #data = self.coordinator.data.get("result")
         data = self.coordinator.data
         if data:             
-            attrs[ATTR_SPEED] = data["speed"]
             attrs[ATTR_DEVICE_STATUS] = data["status"]
-            attrs[ATTR_LAST_UPDATE] = data["updatetime"]
+            attrs["navistatus"] = data["naviStatus"]
+            attrs["macaddr"] = data["macaddr"]            
             if self._attr_show == True:
                 attrs[ATTR_RUNORSTOP] = data["runorstop"]
                 attrs[ATTR_LASTSTOPTIME] = data["laststoptime"]
-                attrs[ATTR_PARKING_TIME] = data["parkingtime"]
+                attrs["lastofflinetime"] = data["lastofflinetime"]
+                attrs["lastonlinetime"] = data["lastonlinetime"]
+                attrs[ATTR_PARKING_TIME] = data["parkingtime"]  
                 attrs[ATTR_QUERYTIME] = data["querytime"]
                 attrs[ATTR_ADDRESS] = self._address
                 if self._gps_conver == True:
@@ -177,8 +180,8 @@ class gooddriverEntity(TrackerEntity):
                     bddata = gcj02_to_bd09(gcjdata[0], gcjdata[1])
                     attrs[CONF_MAP_BD_LAT] = bddata[1]
                     attrs[CONF_MAP_BD_LNG] = bddata[0]
-                
-        return attrs 
+        return attrs    
+
 
     async def async_added_to_hass(self):
         """Connect to dispatcher listening for entity data notifications."""
@@ -187,9 +190,12 @@ class gooddriverEntity(TrackerEntity):
         )
 
     async def async_update(self):
-        """Update gooddriver entity."""
+        """Update autoamap entity."""
+        #_LOGGER.debug("device tracker_update: %s", self.coordinator.data["MESSAGE"]["HD_STATE_TIME"])
         _LOGGER.debug(datetime.datetime.now(datetime.timezone.utc).astimezone().tzinfo)
+        _LOGGER.debug("刷新device_tracker数据")
         #await self.coordinator.async_request_refresh()
+        _LOGGER.debug(self._addressapi)
         if self._gps_conver == True:
             self._coords = gcj02towgs84(self.coordinator.data["thislon"], self.coordinator.data["thislat"])
         else:
@@ -241,7 +247,7 @@ class gooddriverEntity(TrackerEntity):
             ) as error:
                 self._address = self._address or ""
                 raise UpdateFailed(error)
-            
+                
     def get_data(self, url):
         json_text = requests.get(url).content
         json_text = json_text.decode('utf-8')
@@ -259,7 +265,7 @@ class gooddriverEntity(TrackerEntity):
         response = self.get_data(url)
         _LOGGER.debug(response)
         return response
-    
+        
     def get_tencent_geocoding(self, lat, lng):
         api_url = 'https://apis.map.qq.com/ws/geocoder/v1/'
         location = str("{:.6f}".format(lat))+','+str("{:.6f}".format(lng))
@@ -272,7 +278,7 @@ class gooddriverEntity(TrackerEntity):
         response = self.get_data(url)
         _LOGGER.debug(response)
         return response
-        
+
     def get_baidu_geocoding(self, lat, lng):
         api_url = 'https://api.map.baidu.com/reverse_geocoding/v3/'
         location = str("{:.6f}".format(lat))+','+str("{:.6f}".format(lng))
@@ -285,7 +291,7 @@ class gooddriverEntity(TrackerEntity):
         response = self.get_data(url)
         _LOGGER.debug(response)
         return response
-        
+    
     def get_gaode_geocoding(self, lat, lng):
         api_url = 'https://restapi.amap.com/v3/geocode/regeo'
         location = str("{:.6f}".format(lng))+','+str("{:.6f}".format(lat))        
@@ -316,4 +322,3 @@ class gooddriverEntity(TrackerEntity):
         param_str = params + private_key
         signature = hashlib.md5(param_str.encode()).hexdigest()
         return signature
-
