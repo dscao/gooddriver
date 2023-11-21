@@ -1,3 +1,5 @@
+本集成不再更新，后续将由 [cloud_gps](https://github.com/dscao/cloud_gps) 集成替代
+
 # gooddriver
 [![hacs_badge](https://img.shields.io/badge/Home-Assistant-%23049cdb)](https://www.home-assistant.io/)
 [![ha-inkwavemap version](https://img.shields.io/badge/gooddriver-2023.5.19-blue.svg)](https://github.com/dscao/gooddriver)
